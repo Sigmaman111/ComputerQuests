@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login / Signup</title>
+<style>
+    body {
+        background: #f0f2f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+
+    .card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        width: 350px;
+        text-align: center;
+    }
+    input {
+        width: 90%;
+        padding: 8px;
+        margin-bottom: 12px;
+        border-radius: 6px;
+        border: 1px solid #aaa;
+    }
+    button {
+        width: 95%;
+        padding: 10px;
+        margin-top: 8px;
+        cursor: pointer;
+        border: none;
+        background: #4285f4;
+        color: white;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+    .signup {
+        background: #34a853;
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Account Access</h2>
+
+    <!-- Email Login -->
+    <input type="email" id="emailField" placeholder="Enter Gmail">
+    <button onclick="emailLogin()">Log In with Email</button>
+
+    <hr style="margin: 20px 0;">
+
+    <!-- Google Sign-In -->
+    <div id="g_id_onload"
+         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+         data-context="signin"
+         data-callback="handleGoogle">
+    </div>
+
+    <div class="g_id_signin" 
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="continue_with"
+         data-shape="rect">
+    </div>
+
+    <button class="signup" onclick="signup()">Sign Up</button>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<script>
+function emailLogin() {
+    const email = document.getElementById("emailField").value;
+    if (!email || !email.includes("@gmail.com")) {
+        alert("Please enter a valid Gmail address.");
+        return;
+    }
+    alert("Logged in as: " + email);
+    window.location.href = "index.html";
+}
+
+function handleGoogle(response) {
+    alert("Google login successful.");
+    window.location.href = "index.html";
+}
+
+function signup() {
+    alert("Signup successful (placeholder).");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
