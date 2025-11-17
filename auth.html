@@ -12,7 +12,6 @@
         height: 100vh;
         font-family: Arial, sans-serif;
     }
-
     .card {
         background: white;
         padding: 25px;
@@ -49,71 +48,81 @@
 <div class="card">
     <h2>Account Access</h2>
 
-    <!-- Email Login -->
     <input type="email" id="emailField" placeholder="Enter Gmail">
     <button onclick="emailLogin()">Log In with Email</button>
 
     <hr style="margin: 20px 0;">
 
-    <!-- Google Sign-In -->
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    <!-- GOOGLE LOGIN BUTTON -->
+    <div id="g_id_onload"
+         data-client_id="275383359296-ecdf6qlk69fo0lb6p37orqtv0cuilg7i.apps.googleusercontent.com"
+         data-callback="handleGoogle"
+         data-auto_prompt="false">
+    </div>
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDcxP-6xcgnSdT9sYY7bPeDY35669uiUic",
-    authDomain: "computerquests.firebaseapp.com",
-    projectId: "computerquests",
-    storageBucket: "computerquests.firebasestorage.app",
-    messagingSenderId: "275383359296",
-    appId: "1:275383359296:web:1c132d91051820bbbe0ca5",
-    measurementId: "G-51QJTZFDY6"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-
-    <div class="g_id_signin" 
+    <div class="g_id_signin"
          data-type="standard"
          data-size="large"
-         data-theme="outline"
-         data-text="continue_with"
-         data-shape="rect">
+         data-theme="outline">
     </div>
 
     <button class="signup" onclick="signup()">Sign Up</button>
 </div>
 
+<!-- GOOGLE SCRIPT -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
+<!-- FIREBASE INIT -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDcxP-6xcgnSdT9sYY7bPeDY35669uiUic",
+        authDomain: "computerquests.firebaseapp.com",
+        projectId: "computerquests",
+        storageBucket: "computerquests.firebasestorage.app",
+        messagingSenderId: "275383359296",
+        appId: "1:275383359296:web:1c132d91051820bbbe0ca5",
+        measurementId: "G-51QJTZFDY6"
+    };
+
+    // Global auth object
+    window.firebaseAuth = getAuth(initializeApp(firebaseConfig));
+</script>
+
+<!-- APP LOGIC -->
 <script>
 function emailLogin() {
     const email = document.getElementById("emailField").value;
-    if (!email || !email.includes("@gmail.com")) {
+    if (!email.includes("@gmail.com")) {
         alert("Please enter a valid Gmail address.");
         return;
     }
-    alert("Logged in as: " + email);
-    window.location.href = "index.html";
-}
-
-function handleGoogle(response) {
-    alert("Google login successful.");
+    localStorage.setItem("currentUser", email);
     window.location.href = "index.html";
 }
 
 function signup() {
-    alert("Signup successful (placeholder).");
+    const email = document.getElementById("emailField").value;
+    if (!email.includes("@gmail.com")) {
+        alert("Enter a Gmail to sign up.");
+        return;
+    }
+    localStorage.setItem("currentUser", email);
+    window.location.href = "index.html";
+}
+
+// Google login handler
+function handleGoogle(response) {
+    const data = JSON.parse(atob(response.credential.split(".")[1]));
+    const googleID = "google_" + data.sub;
+
+    localStorage.setItem("currentUser", googleID);
     window.location.href = "index.html";
 }
 </script>
 
 </body>
 </html>
+
