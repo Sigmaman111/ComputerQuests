@@ -3,212 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Static Auth Demo — Email & Google Sign-In</title>
+  <title>Auth Demo</title>
   <style>
     :root{--bg:#0f1724;--card:#111827;--accent:#0ea5a4;--muted:#9ca3af;--text:#e6eef6}
     *{box-sizing:border-box;font-family:Inter,Segoe UI,system-ui,Helvetica,Arial,sans-serif}
-    html,body{height:100%}
-    body{margin:0;background:linear-gradient(135deg, #071024 0%, #0B1530 100%);color:var(--text);display:flex;align-items:center;justify-content:center;padding:24px}
-    .card{width:100%;max-width:420px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:22px;box-shadow:0 10px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
-    h1{margin:0 0 8px;font-size:20px}
-    p.lead{margin:0 0 18px;color:var(--muted);font-size:13px}
-    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
-    input[type="email"],input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:var(--text)}
-    .row{display:flex;gap:10px;margin-top:12px}
-    button{flex:1;padding:10px;border-radius:8px;border:0;background:var(--accent);color:#022;cursor:pointer;font-weight:600}
-    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
-    .or{display:flex;align-items:center;margin:16px 0;color:var(--muted);gap:8px;font-size:13px}
-    .or::before,.or::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.03);border-radius:2px}
-    .alt-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px;border-radius:8px;background:#fff;color:#222;font-weight:600;border:0;cursor:pointer}
-    .user-info{margin-top:16px;padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02)}
-    .small{font-size:12px;color:var(--muted)}
+    body{margin:0;background:linear-gradient(135deg,#071024,#0B1530);color:var(--text);display:flex;align-items:center;justify-content:center;height:100vh;padding:24px}
+    .card{width:100%;max-width:420px;background:rgba(255,255,255,0.02);border-radius:12px;padding:22px;border:1px solid rgba(255,255,255,0.04)}
+    label{display:block;margin-top:12px;font-size:12px;color:var(--muted)}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:#fff}
+    button{padding:10px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
+    #sign-in{background:var(--accent);color:#022;width:100%}
+    #sign-up{background:transparent;border:1px solid rgba(255,255,255,0.2);color:#fff;width:100%;margin-top:8px}
+    #google-signin{margin-top:16px;background:#fff;color:#222;width:100%}
     .hidden{display:none}
-    footer{margin-top:12px;text-align:center;color:var(--muted);font-size:12px}
-    a.link{color:var(--accent);text-decoration:none}
+    .small{font-size:12px;color:var(--muted);margin-top:10px}
   </style>
 </head>
 <body>
-  <main class="card" role="main">
-    <h1>Sign in / Sign up</h1>
-    <p class="lead">Sign in with your email (type a Gmail if you prefer) or use Google single-click sign in. This is a static frontend using Firebase Authentication.</p>
+
+  <main class="card">
+    <h2>Sign In / Sign Up</h2>
 
     <div id="auth-forms">
-      <label for="email">Email</label>
-      <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+      <label>Email</label>
+      <input id="email" type="email" placeholder="you@gmail.com">
 
-      <label for="password">Password</label>
-      <input id="password" type="password" placeholder="Enter a password">
+      <label>Password</label>
+      <input id="password" type="password" placeholder="password">
 
-      <div class="row" style="margin-top:12px">
-        <button id="sign-in">Sign in</button>
-        <button id="sign-up" class="ghost">Sign up</button>
-      </div>
+      <button id="sign-in">Sign in</button>
+      <button id="sign-up">Sign up</button>
 
-      <div class="or">OR</div>
+      <button id="google-signin">Sign in with Google</button>
 
-      <button id="google-signin" class="alt-btn">
-        <svg width="18" height="18" viewBox="0 0 533.5 544.3" aria-hidden><path fill="#4285f4" d="M533.5 278.4c0-17.6-1.6-34.5-4.7-51H272v97.1h146.9c-6.3 33.8-25.3 62.4-54 81.6v68.1h87.2c51-47 80.4-116.3 80.4-195.8z"/><path fill="#34a853" d="M272 544.3c73.7 0 135.7-24.4 181-66.6l-87.2-68.1c-24.2 16.3-55 25.9-93.8 25.9-72 0-133-48.6-154.8-114.3H28.9v71.6C74.2 486.2 167.5 544.3 272 544.3z"/><path fill="#fbbc04" d="M117.2 326.2c-8.4-25-8.4-51.9 0-76.9V177.6H28.9c-32.6 64.3-32.6 138.9 0 203.2l88.3-54.6z"/><path fill="#ea4335" d="M272 107.7c39.8 0 75.7 13.7 104 40.6l78.1-78.1C405.8 24 343.8 0 272 0 167.5 0 74.2 58.1 28.9 142.2l88.3 54.6C139 156.3 200 107.7 272 107.7z"/></svg>
-        Sign in with Google
-      </button>
-
-      <div id="error" class="small" style="margin-top:12px;color:#fda4af"></div>
+      <div id="error" class="small"></div>
     </div>
 
     <div id="user-panel" class="hidden">
-      <div class="user-info">
-        <div><strong id="user-name">—</strong></div>
-        <div id="user-email" class="small">—</div>
-        <div id="user-uid" class="small" style="margin-top:8px"></div>
-      </div>
-      <div class="row" style="margin-top:12px">
-        <button id="sign-out" class="ghost">Sign out</button>
-        <button id="delete-account" class="ghost">Delete account</button>
-      </div>
-    </div>
+      <p><strong id="user-name"></strong></p>
+      <p class="small" id="user-email"></p>
+      <p class="small" id="user-uid"></p>
 
-    <footer>
-      <div class="small">This demo uses Firebase Authentication (Email/Password + Google). Add your domain to Firebase Authorized domains.</div>
-    </footer>
+      <button id="sign-out" style="margin-top:12px;background:#444;color:#fff;width:100%">Sign out</button>
+    </div>
   </main>
 
-  <!-- Firebase SDKs (modular SDK) -->
-  <!-- NOTE: replace with the latest version if you prefer; these scripts are the modular CDN builds. -->
+  <!-- Firebase CDN (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 
   <script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcxP-6xcgnSdT9sYY7bPeDY35669uiUic",
+      authDomain: "computerquests.firebaseapp.com",
+      projectId: "computerquests",
+      storageBucket: "computerquests.firebasestorage.app",
+      messagingSenderId: "275383359296",
+      appId: "1:275383359296:web:1c132d91051820bbbe0ca5",
+      measurementId: "G-51QJTZFDY6"
+    };
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDcxP-6xcgnSdT9sYY7bPeDY35669uiUic",
-    authDomain: "computerquests.firebaseapp.com",
-    projectId: "computerquests",
-    storageBucket: "computerquests.firebasestorage.app",
-    messagingSenderId: "275383359296",
-    appId: "1:275383359296:web:1c132d91051820bbbe0ca5",
-    measurementId: "G-51QJTZFDY6"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-
-    // ====================================================================================
-
-    // Initialize Firebase
+    // Initialise Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // UI elements
-    const emailEl = document.getElementById('email');
-    const passEl  = document.getElementById('password');
-    const signInBtn = document.getElementById('sign-in');
-    const signUpBtn = document.getElementById('sign-up');
-    const googleBtn = document.getElementById('google-signin');
-    const errorEl = document.getElementById('error');
-    const authForms = document.getElementById('auth-forms');
-    const userPanel = document.getElementById('user-panel');
-    const userName = document.getElementById('user-name');
-    const userEmail = document.getElementById('user-email');
-    const userUid = document.getElementById('user-uid');
-    const signOutBtn = document.getElementById('sign-out');
-    const deleteBtn = document.getElementById('delete-account');
+    const emailEl = document.getElementById("email");
+    const passEl = document.getElementById("password");
+    const errorEl = document.getElementById("error");
 
-    // Helper to show errors
-    function showError(message){
-      errorEl.textContent = message || '';
-    }
+    const authForms = document.getElementById("auth-forms");
+    const userPanel = document.getElementById("user-panel");
 
-    // Sign up with email & password
-    signUpBtn.addEventListener('click', async () => {
-      showError('');
-      const email = (emailEl.value || '').trim();
-      const password = passEl.value || '';
-      if(!email || !password){ showError('Please enter email and password.'); return; }
+    const userName = document.getElementById("user-name");
+    const userEmail = document.getElementById("user-email");
+    const userUid = document.getElementById("user-uid");
+
+    document.getElementById("sign-up").onclick = async () => {
+      errorEl.textContent = "";
       try {
-        const cred = await auth.createUserWithEmailAndPassword(email, password);
-        // user automatically signed in after sign up
-        console.log('Signed up:', cred.user.uid);
-      } catch (err) {
-        showError(err.message);
+        await auth.createUserWithEmailAndPassword(emailEl.value, passEl.value);
+      } catch (e) {
+        errorEl.textContent = e.message;
       }
-    });
+    };
 
-    // Sign in with email & password
-    signInBtn.addEventListener('click', async () => {
-      showError('');
-      const email = (emailEl.value || '').trim();
-      const password = passEl.value || '';
-      if(!email || !password){ showError('Please enter email and password.'); return; }
+    document.getElementById("sign-in").onclick = async () => {
+      errorEl.textContent = "";
       try {
-        await auth.signInWithEmailAndPassword(email, password);
-      } catch (err) {
-        showError(err.message);
+        await auth.signInWithEmailAndPassword(emailEl.value, passEl.value);
+      } catch (e) {
+        errorEl.textContent = e.message;
       }
-    });
+    };
 
-    // Sign in with Google (popup)
-    googleBtn.addEventListener('click', async () => {
-      showError('');
+    document.getElementById("google-signin").onclick = async () => {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         await auth.signInWithPopup(provider);
-      } catch (err) {
-        showError(err.message);
+      } catch (e) {
+        errorEl.textContent = e.message;
       }
-    });
+    };
 
-    // Sign out
-    signOutBtn.addEventListener('click', async () => {
-      await auth.signOut();
-    });
+    document.getElementById("sign-out").onclick = () => auth.signOut();
 
-    // Delete account (requires recent login; may fail if session is old)
-    deleteBtn.addEventListener('click', async () => {
-      const user = auth.currentUser;
-      if(!user){ showError('No signed-in user.'); return; }
-      if(!confirm('Delete this account? This action cannot be undone.')) return;
-      try {
-        await user.delete();
-      } catch (err) {
-        // If the user needs to reauthenticate, inform them
-        showError(err.message || 'Unable to delete account. Try signing-in again and retry.');
-      }
-    });
-
-    // Auth state listener
     auth.onAuthStateChanged(user => {
-      if(user){
-        // show user panel
-        authForms.classList.add('hidden');
-        userPanel.classList.remove('hidden');
-        userName.textContent = user.displayName || '(No display name)';
-        userEmail.textContent = user.email || '';
-        userUid.textContent = 'UID: ' + user.uid;
+      if (user) {
+        authForms.classList.add("hidden");
+        userPanel.classList.remove("hidden");
+        userName.textContent = user.displayName || "User";
+        userEmail.textContent = user.email;
+        userUid.textContent = "UID: " + user.uid;
       } else {
-        // show sign form
-        authForms.classList.remove('hidden');
-        userPanel.classList.add('hidden');
-        userName.textContent = '—';
-        userEmail.textContent = '—';
-        userUid.textContent = '';
+        authForms.classList.remove("hidden");
+        userPanel.classList.add("hidden");
       }
-      showError('');
     });
-
-    // Optional: prefill email with a gmail suggestion if desired
-    (function prefillGmailHint(){
-      // This is a convenience only; remove if not wanted.
-      if(!emailEl.value) emailEl.value = '';
-    })();
   </script>
+
 </body>
 </html>
